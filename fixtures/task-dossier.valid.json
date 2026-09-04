@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "atlasrepo.core/task-dossier/v0.1",
+  "id": "3f582d90-384d-4b95-a7f8-891ec98f76aa",
+  "revision": 1,
+  "createdAt": "2026-09-05T00:00:00.000Z",
+  "updatedAt": "2026-09-05T00:00:00.000Z",
+  "title": "Choose a repository search platform",
+  "context": {
+    "description": "Compare a candidate against explicit local constraints.",
+    "constraints": ["self-hosted", "reproducible evidence"]
+  },
+  "evidence": [
+    {
+      "id": "repository-snapshot",
+      "kind": "repository-analysis",
+      "title": "Pinned repository snapshot",
+      "uri": "https://github.com/example/project/tree/0123456789abcdef0123456789abcdef01234567",
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "observedAt": "2026-09-05T00:00:00.000Z",
+      "producer": {
+        "name": "atlas-engine",
+        "version": "0.4.2"
+      },
+      "limitations": ["Example data only"]
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "candidate-fits",
+      "statement": "The candidate satisfies the stated constraints.",
+      "status": "supported",
+      "evidenceIds": ["repository-snapshot"]
+    }
+  ],
+  "checks": [
+    {
+      "id": "build-check",
+      "hypothesisId": "candidate-fits",
+      "description": "Run the documented build from the pinned snapshot.",
+      "status": "passed",
+      "evidenceIds": ["repository-snapshot"]
+    }
+  ],
+  "decision": {
+    "summary": "Evaluate the candidate in a bounded pilot.",
+    "rationale": "The pinned snapshot passed the first deterministic check.",
+    "hypothesisIds": ["candidate-fits"],
+    "evidenceIds": ["repository-snapshot"],
+    "decidedAt": "2026-09-05T00:00:00.000Z"
+  },
+  "actions": [
+    {
+      "id": "bounded-pilot",
+      "description": "Run a local, non-production pilot.",
+      "status": "pending",
+      "resultEvidenceIds": []
+    }
+  ]
+}

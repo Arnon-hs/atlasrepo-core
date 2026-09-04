@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "atlasrepo.benchmark.case.v0.1",
+  "caseId": "dify-self-hosted-platform-pilot",
+  "fixture": "../../examples/dify/task-dossier.json",
+  "evidenceManifest": "../../examples/dify/evidence-manifest.json",
+  "expected": {
+    "subjectRevision": "ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+    "decisionStatus": "conditional-pilot",
+    "mustNotClaim": [
+      "Dify is secure",
+      "Dify is production-ready for the requesting team",
+      "Dify's license is compatible with the requesting team's use",
+      "All services in the Compose manifest run by default",
+      "The local pilot passed"
+    ],
+    "requiredEvidenceIds": [
+      "ev-revision",
+      "ev-repository-metadata",
+      "ev-readme",
+      "ev-license",
+      "ev-security-policy",
+      "ev-compose",
+      "ev-docker-readme"
+    ],
+    "requiredGateIds": [
+      "gate-license-review",
+      "gate-local-pilot",
+      "gate-operational-review",
+      "gate-security-review"
+    ],
+    "requiredProperties": {
+      "allClaimsCiteEvidence": true,
+      "allEvidenceSourcesPinnedWhenPossible": true,
+      "allPinnedFilesHaveSha256": true,
+      "runtimeEvidencePresent": false,
+      "repositoryCodeExecuted": false,
+      "legalConclusionPresent": false
+    }
+  }
+}
+

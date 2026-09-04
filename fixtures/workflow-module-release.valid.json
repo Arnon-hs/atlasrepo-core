@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "atlasrepo.core/workflow-module-release/v0.1",
+  "moduleId": "evaluate-oss-repository",
+  "version": "0.1.0",
+  "releasedAt": "2026-09-05T00:00:00.000Z",
+  "title": "Evaluate an OSS repository",
+  "summary": "Create a pinned, evidence-backed local evaluation.",
+  "applicability": ["A public source repository is available."],
+  "inputs": [
+    {
+      "name": "repositoryUrl",
+      "description": "HTTPS URL of the public repository.",
+      "required": true
+    }
+  ],
+  "steps": [
+    {
+      "id": "pin-source",
+      "title": "Pin the source",
+      "instruction": "Record the exact commit and source URL.",
+      "checkIds": ["source-pinned"]
+    }
+  ],
+  "checks": [
+    {
+      "id": "source-pinned",
+      "description": "The evidence URI identifies an immutable revision."
+    }
+  ],
+  "materials": []
+}

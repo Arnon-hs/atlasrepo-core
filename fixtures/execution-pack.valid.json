@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "atlasrepo.core/execution-pack/v0.1",
+  "id": "28ea761f-99bb-40a8-abd5-cd7b95f22b90",
+  "dossierId": "3f582d90-384d-4b95-a7f8-891ec98f76aa",
+  "createdAt": "2026-09-05T00:00:00.000Z",
+  "scope": "Run the documented local build only.",
+  "constraints": ["No deployment", "No external writes"],
+  "steps": [
+    {
+      "id": "build",
+      "instruction": "Run the repository's documented build command."
+    }
+  ],
+  "expectedArtifacts": ["Build exit status", "Pinned source revision"]
+}

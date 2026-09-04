@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlasrepo.com/schemas/core/task-dossier.v0.1.schema.json",
+  "title": "AtlasRepo task dossier v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "revision", "createdAt", "updatedAt", "title", "context", "evidence", "hypotheses", "checks", "actions"],
+  "properties": {
+    "schemaVersion": {"const": "atlasrepo.core/task-dossier/v0.1"},
+    "id": {"type": "string", "format": "uuid"},
+    "revision": {"type": "integer", "minimum": 1},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "updatedAt": {"type": "string", "format": "date-time"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 300},
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "constraints"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "constraints": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/hypothesis"}
+    },
+    "checks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/check"}
+    },
+    "decision": {"$ref": "#/$defs/decision"},
+    "actions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/action"}
+    },
+    "outcome": {"$ref": "#/$defs/outcome"},
+    "extensions": {"type": "object", "additionalProperties": true}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "title", "digest", "observedAt", "producer"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["document", "repository-analysis", "user-input", "execution-result", "dataset", "other"]},
+        "title": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "format": "uri"},
+        "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "observedAt": {"type": "string", "format": "date-time"},
+        "producer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "version": {"type": "string", "minLength": 1}
+          }
+        },
+        "license": {"type": "string", "minLength": 1},
+        "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "status", "evidenceIds"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "statement": {"type": "string", "minLength": 1},
+        "status": {"enum": ["proposed", "supported", "rejected"]},
+        "evidenceIds": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "status", "evidenceIds"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "hypothesisId": {"$ref": "#/$defs/id"},
+        "description": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pending", "passed", "failed", "inconclusive"]},
+        "evidenceIds": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "rationale", "hypothesisIds", "evidenceIds", "decidedAt"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "hypothesisIds": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+        "evidenceIds": {"type": "array", "items": {"$ref": "#/$defs/id"}, "minItems": 1, "uniqueItems": true},
+        "decidedAt": {"type": "string", "format": "date-time"}
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "status", "resultEvidenceIds"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "description": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pending", "running", "completed", "failed", "skipped"]},
+        "resultEvidenceIds": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "summary", "evidenceIds", "recordedAt"],
+      "properties": {
+        "status": {"enum": ["succeeded", "partial", "failed", "unknown"]},
+        "summary": {"type": "string", "minLength": 1},
+        "evidenceIds": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+        "recordedAt": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
