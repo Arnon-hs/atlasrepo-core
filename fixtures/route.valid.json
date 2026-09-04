@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "atlasrepo.core/route/v0.1",
+  "id": "73ab3b60-17c9-4454-b0d5-bfa4fe477dfa",
+  "createdAt": "2026-09-05T00:00:00.000Z",
+  "title": "OSS evaluation route",
+  "modules": [
+    {
+      "moduleId": "evaluate-oss-repository",
+      "version": "0.1.0"
+    }
+  ]
+}

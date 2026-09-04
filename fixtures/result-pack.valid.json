@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "atlasrepo.core/result-pack/v0.1",
+  "id": "e3430b22-b668-4d9f-8fd4-86f5233dd22e",
+  "executionPackId": "28ea761f-99bb-40a8-abd5-cd7b95f22b90",
+  "completedAt": "2026-09-05T00:10:00.000Z",
+  "status": "succeeded",
+  "summary": "The documented local build completed successfully.",
+  "evidence": [
+    {
+      "title": "Build receipt",
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "uri": "file:./receipts/build.json"
+    }
+  ]
+}

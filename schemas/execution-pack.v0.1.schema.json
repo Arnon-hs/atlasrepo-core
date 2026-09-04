@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlasrepo.com/schemas/core/execution-pack.v0.1.schema.json",
+  "title": "AtlasRepo execution pack v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "dossierId", "createdAt", "scope", "constraints", "steps", "expectedArtifacts"],
+  "properties": {
+    "schemaVersion": {"const": "atlasrepo.core/execution-pack/v0.1"},
+    "id": {"type": "string", "format": "uuid"},
+    "dossierId": {"type": "string", "format": "uuid"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "scope": {"type": "string", "minLength": 1},
+    "constraints": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "instruction"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "instruction": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "expectedArtifacts": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  }
+}

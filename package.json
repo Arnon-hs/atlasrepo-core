@@ -1,0 +1,46 @@
+{
+  "name": "@atlasrepo/core",
+  "version": "0.1.0",
+  "description": "Open, local-first contracts and tooling for evidence-backed decisions.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "bin": {
+    "atlasrepo-core": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schemas/*": "./schemas/*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "test": "npm run build --silent && node --import tsx --test test/*.test.ts tests/*.test.mjs",
+    "test:coverage": "npm run build --silent && node --experimental-test-coverage --import tsx --test test/*.test.ts tests/*.test.mjs",
+    "benchmark:dify": "npm run build --silent && node --test tests/benchmark-dify.test.mjs",
+    "schema:smoke": "npm run build --silent && node dist/cli.js schema-smoke",
+    "prepack": "npm run clean && npm run check && npm test && npm run build"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

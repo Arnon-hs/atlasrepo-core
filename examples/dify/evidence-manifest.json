@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "atlasrepo.example.evidence-manifest.v0.1",
+  "bundleId": "dify-public-repository-evidence-2026-09-05",
+  "observedAt": "2026-09-05T00:00:00+07:00",
+  "subject": {
+    "kind": "git-repository",
+    "name": "langgenius/dify",
+    "url": "https://github.com/langgenius/dify",
+    "revision": "ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+    "revisionUrl": "https://github.com/langgenius/dify/commit/ad90cb911138f6b27af996c87afe34fbb5a4ed16"
+  },
+  "collectionPolicy": {
+    "publicSourcesOnly": true,
+    "repositoryCloned": false,
+    "repositoryCodeExecuted": false,
+    "containersStarted": false,
+    "observationTimestampPolicy": "Timestamps are normalized to the start of the observed local date; the exact retrieval second was not retained.",
+    "claimPolicy": "Source statements are candidate evidence, not runtime proof."
+  },
+  "evidence": [
+    {
+      "id": "ev-revision",
+      "kind": "git-ref-observation",
+      "sourceUrl": "https://github.com/langgenius/dify.git",
+      "retrievalMethod": "git ls-remote <sourceUrl> refs/heads/main",
+      "mediaType": "text/plain",
+      "bytesRepresented": "ad90cb911138f6b27af996c87afe34fbb5a4ed16\\trefs/heads/main\\n",
+      "sha256": "931679421a809e6319d89facb90a90c472de65bb38a0b9b0a34c265ddd5cc30c",
+      "facts": {
+        "ref": "refs/heads/main",
+        "revision": "ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+        "commitTimestamp": "2026-09-04T14:48:46Z",
+        "githubCommitSignatureVerified": true
+      }
+    },
+    {
+      "id": "ev-repository-metadata",
+      "kind": "github-repository-metadata",
+      "sourceUrl": "https://api.github.com/repos/langgenius/dify",
+      "retrievalMethod": "gh repo view langgenius/dify --json nameWithOwner,url,visibility,isArchived,defaultBranchRef,licenseInfo,description",
+      "mediaType": "application/json",
+      "canonicalObservationSha256": "897f0a017e728763735b71f6110da75cb2643e6b3d2ff3bb06a3581ec2357eff",
+      "facts": {
+        "visibility": "PUBLIC",
+        "archived": false,
+        "defaultBranch": "main",
+        "githubLicenseClassification": "Other"
+      },
+      "limitations": [
+        "GitHub visibility does not determine whether a license is OSI-approved or suitable for a specific use.",
+        "Repository metadata can change after the observation time."
+      ]
+    },
+    {
+      "id": "ev-readme",
+      "kind": "upstream-file",
+      "sourceUrl": "https://raw.githubusercontent.com/langgenius/dify/ad90cb911138f6b27af996c87afe34fbb5a4ed16/README.md",
+      "humanUrl": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/README.md",
+      "gitBlobSha1": "c3f68564c8508b45187958696257a57859c9fdb4",
+      "sha256": "51647e1180794278e006c7e1925eec056d5b68a036893143849ef83ad695e7e2",
+      "sizeBytes": 11950,
+      "mediaType": "text/markdown",
+      "supports": [
+        "The project describes workflow, RAG, agent, model-management, observability, and API capabilities.",
+        "The project documents a Docker Compose self-hosting path and states minimum CPU and memory requirements."
+      ],
+      "limitations": [
+        "These are upstream documentation claims, not results observed by AtlasRepo.",
+        "This fixture does not test feature completeness, performance, or compatibility."
+      ]
+    },
+    {
+      "id": "ev-license",
+      "kind": "upstream-license-file",
+      "sourceUrl": "https://raw.githubusercontent.com/langgenius/dify/ad90cb911138f6b27af996c87afe34fbb5a4ed16/LICENSE",
+      "humanUrl": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/LICENSE",
+      "gitBlobSha1": "329ee302875f292fdd11e12e830562d0be9ade1c",
+      "sha256": "232cf91474932d5110ed304e53b6b742a58463857c571fae803fdf2ac36d7bb3",
+      "sizeBytes": 1801,
+      "mediaType": "text/plain",
+      "supports": [
+        "The file describes a modified Apache License 2.0 with additional conditions.",
+        "The additional conditions address multi-tenant operation and frontend logo or copyright changes."
+      ],
+      "limitations": [
+        "This is technical evidence, not legal advice.",
+        "Applicability to a proposed use requires manual legal or qualified compliance review."
+      ]
+    },
+    {
+      "id": "ev-security-policy",
+      "kind": "upstream-file",
+      "sourceUrl": "https://raw.githubusercontent.com/langgenius/dify/ad90cb911138f6b27af996c87afe34fbb5a4ed16/SECURITY.md",
+      "humanUrl": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/SECURITY.md",
+      "gitBlobSha1": "7053d9ebde57f7551fee5329f424b6c67a964c5c",
+      "sha256": "e9e3e170a9dd268aabd4700795833dec8de387113ecb449ff4a692908a2b08c4",
+      "sizeBytes": 1116,
+      "mediaType": "text/markdown",
+      "supports": [
+        "The repository documents a private vulnerability reporting process through GitHub Security Advisories."
+      ],
+      "limitations": [
+        "The existence of a disclosure policy does not establish the absence of vulnerabilities or operational security."
+      ]
+    },
+    {
+      "id": "ev-compose",
+      "kind": "upstream-deployment-manifest",
+      "sourceUrl": "https://raw.githubusercontent.com/langgenius/dify/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/docker-compose.yaml",
+      "humanUrl": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/docker-compose.yaml",
+      "gitBlobSha1": "0ad2271b29dacf2bbd437261300f46d0f69cc3de",
+      "sha256": "8644fa96677327d4af69483bc0dcdf16a21b37d4ed52aaba0e3702bea7168ba8",
+      "sizeBytes": 47695,
+      "mediaType": "application/yaml",
+      "supports": [
+        "The pinned manifest defines application, worker, database, Redis, sandbox, proxy, and optional vector-store services.",
+        "The manifest is sufficient to identify an operational surface that must be tested before adoption."
+      ],
+      "limitations": [
+        "The manifest was inspected as text and was not applied.",
+        "Listed services may be conditional; their presence does not prove they all run in the default profile."
+      ]
+    },
+    {
+      "id": "ev-docker-readme",
+      "kind": "upstream-file",
+      "sourceUrl": "https://raw.githubusercontent.com/langgenius/dify/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/README.md",
+      "humanUrl": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/README.md",
+      "gitBlobSha1": "7d66e62632f037a6746df1ef486c8f981eb5ecae",
+      "sha256": "ad4ed57b7901e35efb10a189ce6fe01b610a164885639a23a555f4e28d3e23d9",
+      "sizeBytes": 10536,
+      "mediaType": "text/markdown",
+      "supports": [
+        "The deployment guide requires Docker Compose 2.24.0 or later and documents environment configuration, data services, and update considerations."
+      ],
+      "limitations": [
+        "Documented procedures were not executed in this evidence-only fixture."
+      ]
+    }
+  ]
+}
