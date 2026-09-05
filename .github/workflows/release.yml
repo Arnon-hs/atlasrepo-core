@@ -41,6 +41,8 @@ jobs:
       - run: npm test
       - run: npm run benchmark:dify
       - run: npm audit --omit=dev
+      - name: Verify reproducible offline package
+        run: npm run package:verify
 
       - name: Build reproducible package
         id: package
