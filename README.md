@@ -88,6 +88,12 @@ distribution, and branding model. See [the example](examples/dify/README.md)
 for the evidence boundary and unresolved runtime, security, operations, and
 license gates.
 
+The same proof case includes a provider-neutral, offline adapter from the
+pinned Atlas Research evaluation result to a Core v0.2 evidence entry. The
+adapter verifies exact evaluator, input, and output digests and fails closed on
+missing public/restricted classification. See the
+[research evidence adapter](docs/research-evidence-adapter.md).
+
 ## SDK
 
 ```ts
@@ -115,6 +121,8 @@ Main exports:
 - `canonicalJson` and `sha256Digest`
 - `composeDecisionPack`
 - `verifyWorkflowMaterials` for local raw-byte digest verification
+- `adaptResearchEvaluation` and `canonicalResearchEvidenceReceipt` for a pure,
+  digest-checked Atlas Research handoff
 - `FileSystemStore`, `replay`, and `readReplayFile`
 - portable document and provider interface types
 
