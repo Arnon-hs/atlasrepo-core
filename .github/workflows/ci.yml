@@ -30,21 +30,18 @@ jobs:
         shell: bash
         run: |
           version="$(node -p "require('./package.json').version")"
-          npm pack --dry-run --json | jq -e --arg expected "atlasrepo-core-${version}.tgz" 'length == 1 and .[0].filename == $expected'
-      - name: Verify fresh tarball install
-        shell: bash
-        run: |
-          set -euo pipefail
-          package="$(npm pack --json | jq -r '.[0].filename')"
-          package_path="$PWD/$package"
-          install_root="$(mktemp -d "${RUNNER_TEMP:?}/atlasrepo-core-install.XXXXXX")"
-          trap 'rm -rf "$install_root" "$package_path"' EXIT HUP INT TERM
-          cd "$install_root"
-          npm init --yes >/dev/null
-          npm install --ignore-scripts "$package_path"
-          node --input-type=module -e "import('@atlasrepo/core').then((core) => { if (typeof core.composeDecisionPack !== 'function') process.exit(1) })"
-          mkdir "$install_root/repacked"
-          cd node_modules/@atlasrepo/core
-          repacked="$(npm pack --json --pack-destination "$install_root/repacked" | jq -r '.[0].filename')"
-          cmp "$package_path" "$install_root/repacked/$repacked"
+          npm pack --dry-run --json | jq -e --arg expected "atlasrepo-core-${version}.tgz" '
+            length == 1 and
+            .[0].filename == $expected and
+            (.[0].bundled | sort) == [
+              "ajv",
+              "ajv-formats",
+              "fast-deep-equal",
+              "fast-uri",
+              "json-schema-traverse",
+              "require-from-string"
+            ]
+          '
+      - name: Verify reproducible offline package
+        run: npm run package:verify
       - run: npm audit --omit=dev

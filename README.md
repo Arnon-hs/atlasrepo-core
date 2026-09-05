@@ -163,10 +163,15 @@ npm run check
 npm test
 npm run build
 npm pack --dry-run
+npm run package:verify
 ```
 
 CI runs type checking, tests, build, package inspection, and a production
-dependency audit on Node.js 22.
+dependency audit on Node.js 22. The package verifier proves that the exact
+runtime dependency closure and its license texts are inside the tarball, then
+installs from an empty npm cache in offline mode and exercises library, schema,
+and CLI imports. It also requires direct packs and an installed-package repack
+to be byte-identical.
 
 ## Project scope
 
