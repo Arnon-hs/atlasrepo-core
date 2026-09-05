@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Arnon-hs/atlasrepo-core/v0.2.0/schemas/workflow-module-release.v0.2.schema.json",
+  "title": "AtlasRepo workflow module release v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "moduleId", "version", "releasedAt", "title", "summary", "locale",
+    "audiences", "applicability", "problem", "intendedOutcomes", "exclusions", "evidence",
+    "claims", "prerequisites", "relatedModules", "inputs", "outputs", "steps", "checks",
+    "readinessCriteria", "materials"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "atlasrepo.core/workflow-module-release/v0.2"},
+    "moduleId": {"$ref": "#/$defs/moduleId"},
+    "version": {"$ref": "#/$defs/version"},
+    "releasedAt": {"type": "string", "format": "date-time"},
+    "title": {"type": "string", "minLength": 1},
+    "summary": {"type": "string", "minLength": 1},
+    "locale": {"$ref": "#/$defs/locale"},
+    "audiences": {"$ref": "#/$defs/nonEmptyUniqueStrings"},
+    "applicability": {"$ref": "#/$defs/nonEmptyUniqueStrings"},
+    "problem": {"type": "string", "minLength": 1},
+    "intendedOutcomes": {"$ref": "#/$defs/nonEmptyUniqueStrings"},
+    "exclusions": {"$ref": "#/$defs/uniqueStrings"},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "claims": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/modulePin"}
+    },
+    "relatedModules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["moduleId", "version", "relationship"],
+        "properties": {
+          "moduleId": {"$ref": "#/$defs/moduleId"},
+          "version": {"$ref": "#/$defs/version"},
+          "relationship": {"enum": ["recommended", "alternative", "next"]}
+        }
+      }
+    },
+    "inputs": {"$ref": "#/$defs/ports"},
+    "outputs": {"$ref": "#/$defs/ports"},
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "instruction", "dependsOn", "checkIds", "executionPolicy"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "title": {"type": "string", "minLength": 1},
+          "instruction": {"type": "string", "minLength": 1},
+          "dependsOn": {"$ref": "#/$defs/idRefs"},
+          "checkIds": {"$ref": "#/$defs/nonEmptyIdRefs"},
+          "executionPolicy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "effect", "approval", "networkDomains", "secretNames", "timeoutSeconds",
+              "idempotency", "maxAttempts", "recovery"
+            ],
+            "properties": {
+              "effect": {"enum": ["read-only", "local-write", "external-write", "destructive"]},
+              "approval": {"enum": ["not-required", "required-before-step"]},
+              "networkDomains": {"$ref": "#/$defs/domains"},
+              "secretNames": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$"}
+              },
+              "timeoutSeconds": {"type": "integer", "minimum": 1, "maximum": 86400},
+              "costLimitUsd": {"type": "number", "minimum": 0},
+              "idempotency": {"enum": ["not-applicable", "idempotent", "requires-key"]},
+              "maxAttempts": {"type": "integer", "minimum": 1, "maximum": 10},
+              "recovery": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "evidenceRequirements"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "description": {"type": "string", "minLength": 1},
+          "evidenceRequirements": {"$ref": "#/$defs/nonEmptyUniqueStrings"}
+        }
+      }
+    },
+    "readinessCriteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "required", "checkIds"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "description": {"type": "string", "minLength": 1},
+          "required": {"type": "boolean"},
+          "checkIds": {"$ref": "#/$defs/nonEmptyIdRefs"}
+        }
+      }
+    },
+    "materials": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id", "kind", "title", "resourceRef", "digest", "mediaType", "locale",
+          "accessHint", "license", "attribution", "evidenceIds", "limitations"
+        ],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "kind": {"enum": ["lesson", "article", "video", "prompt", "skill", "checklist", "template", "source-file", "other"]},
+          "title": {"type": "string", "minLength": 1},
+          "resourceRef": {"type": "string", "minLength": 1},
+          "bundlePath": {"type": "string", "minLength": 1},
+          "publicUri": {"type": "string", "format": "uri"},
+          "digest": {"$ref": "#/$defs/digest"},
+          "mediaType": {"type": "string", "pattern": "^[a-z0-9!#$&^_.+-]+/[a-z0-9!#$&^_.+-]+$"},
+          "locale": {"$ref": "#/$defs/locale"},
+          "accessHint": {"enum": ["public", "restricted"]},
+          "license": {"type": "string", "minLength": 1},
+          "attribution": {"type": "string", "minLength": 1},
+          "evidenceIds": {"$ref": "#/$defs/nonEmptyIdRefs"},
+          "limitations": {"$ref": "#/$defs/uniqueStrings"}
+        }
+      }
+    },
+    "extensions": {"type": "object", "additionalProperties": true}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"},
+    "idRefs": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/id"},
+      "uniqueItems": true
+    },
+    "nonEmptyIdRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/id"},
+      "uniqueItems": true
+    },
+    "moduleId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"},
+    "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "locale": {"type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2}|-[0-9]{3})?$"},
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "nonEmptyUniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "domains": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$"}
+    },
+    "modulePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["moduleId", "version"],
+      "properties": {
+        "moduleId": {"$ref": "#/$defs/moduleId"},
+        "version": {"$ref": "#/$defs/version"}
+      }
+    },
+    "ports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "required", "valueSchema"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$"},
+          "description": {"type": "string", "minLength": 1},
+          "required": {"type": "boolean"},
+          "valueSchema": {"type": "object"}
+        }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "kind", "title", "resourceRef", "digest", "observedAt",
+        "producer", "accessHint", "limitations"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["document", "repository-analysis", "user-input", "execution-result", "dataset", "other"]},
+        "title": {"type": "string", "minLength": 1},
+        "resourceRef": {"type": "string", "minLength": 1},
+        "publicUri": {"type": "string", "format": "uri"},
+        "digest": {"$ref": "#/$defs/digest"},
+        "observedAt": {"type": "string", "format": "date-time"},
+        "producer": {"$ref": "#/$defs/producer"},
+        "accessHint": {"enum": ["public", "restricted"]},
+        "license": {"type": "string", "minLength": 1},
+        "limitations": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "classification", "evidenceIds", "limitations"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "statement": {"type": "string", "minLength": 1},
+        "classification": {"enum": ["confirmed", "assumption", "recommendation"]},
+        "evidenceIds": {"$ref": "#/$defs/idRefs"},
+        "limitations": {"$ref": "#/$defs/uniqueStrings"}
+      }
+    }
+  }
+}

@@ -7,8 +7,13 @@
 AtlasRepo Core is an open, local-first TypeScript SDK and CLI for evidence-backed
 technical decisions.
 
-> **Status:** alpha. The v0.1 contracts are usable for local experiments, but may
-> change before 1.0.
+> **Status:** alpha. Core supports the published v0.1 contracts and introduces
+> additive v0.2 dossier, workflow-release, and route contracts. Contracts may
+> evolve through new schema versions before 1.0; published schema files are not
+> silently changed.
+
+When upgrading from v0.1, read [MIGRATING.md](MIGRATING.md) for the canonical
+digest correction.
 
 Core records the path from a task to a reviewable outcome:
 
@@ -16,10 +21,10 @@ Core records the path from a task to a reviewable outcome:
 context -> evidence -> hypotheses -> checks -> decision -> actions -> outcome
 ```
 
-It keeps model claims separate from evidence, pins reusable workflow releases,
-and produces execution and result packs that another tool or human can act on.
-Core does not execute repository code, call an LLM, fetch URLs, deploy services,
-or grant an agent permissions.
+It keeps claims separate from evidence, pins reusable workflow releases, and
+composes a compact decision pack that another tool or human can review. Core
+does not execute repository code, call an LLM, access the network, deploy a
+service, or grant an agent permissions.
 
 ## Why Core
 
@@ -30,10 +35,14 @@ LLM output alone is difficult to audit and reproduce. Core supplies:
 - a durable local filesystem store with atomic replacement and dossier history;
 - optimistic dossier revisions and immutable workflow releases;
 - deterministic JSON canonicalization, digests, and event replay;
+- pure decision-pack composition from an exact dossier, route, and module set;
 - provider-neutral interfaces without a runtime model dependency.
 
-Hosted collaboration, billing, access control, and private content belong to the
-AtlasRepo Platform. Core stays useful without an AtlasRepo account.
+AtlasRepo Platform owns mutable drafts, hosted workspaces, authentication, ACLs,
+entitlements, UTM tracking, private material delivery, billing, and Course Bot.
+AtlasRepo Scout selects candidates and collects evidence. Core only validates
+portable artifacts and derives a decision pack from explicit inputs, so it stays
+useful without an AtlasRepo account.
 
 ## Quickstart
 
@@ -73,8 +82,11 @@ integrity without executing Dify or claiming production readiness:
 npm run benchmark:dify
 ```
 
-See [the example](examples/dify/README.md) for its evidence boundary and
-unresolved gates.
+Its result is `conditional-pilot`, not a production recommendation. A human
+must review Dify's modified license against the intended use, tenancy,
+distribution, and branding model. See [the example](examples/dify/README.md)
+for the evidence boundary and unresolved runtime, security, operations, and
+license gates.
 
 ## SDK
 
@@ -83,13 +95,13 @@ import {
   FileSystemStore,
   assertValidDocument,
   sha256Digest,
-  type TaskDossier,
+  type AnyTaskDossier,
 } from "@atlasrepo/core";
 
 const candidate: unknown = JSON.parse(input);
 assertValidDocument("task-dossier", candidate);
 
-const dossier: TaskDossier = candidate;
+const dossier: AnyTaskDossier = candidate;
 const store = new FileSystemStore(".atlasrepo");
 await store.put("task-dossier", dossier, 0);
 
@@ -98,8 +110,11 @@ console.log(sha256Digest(dossier));
 
 Main exports:
 
-- `validateDocument`, `assertValidDocument`, and `inferDocumentKind`
+- `validateDocument`, `assertValidDocument`, `inferDocumentKind`,
+  `getSchema`, and `getLatestSchema`
 - `canonicalJson` and `sha256Digest`
+- `composeDecisionPack`
+- `verifyWorkflowMaterials` for local raw-byte digest verification
 - `FileSystemStore`, `replay`, and `readReplayFile`
 - portable document and provider interface types
 
@@ -115,6 +130,7 @@ atlasrepo-core dossier history <id> --store <path>
 atlasrepo-core import <kind> <file> --store <path>
 atlasrepo-core export <kind> <id> --store <path> --out <file>
 atlasrepo-core replay <events.jsonl> --store <path>
+atlasrepo-core compose decision-pack <input.json> --out <file>
 ```
 
 Supported document kinds:
@@ -122,6 +138,7 @@ Supported document kinds:
 - `task-dossier`
 - `workflow-module-release`
 - `route`
+- `decision-pack`
 - `execution-pack`
 - `result-pack`
 
@@ -153,16 +170,21 @@ dependency audit on Node.js 22.
 
 ## Project scope
 
-Core owns the open decision lifecycle and portable contracts. It does not own:
+Core owns the open decision lifecycle, portable contracts, validation, content
+identity, and pure decision-pack composition. It does not own:
 
-- hosted tenancy, authentication, billing, or entitlement checks;
-- web crawling, source acquisition, or search indexing;
+- drafts, hosted tenancy, authentication, ACLs, billing, or entitlements;
+- UTM tracking, private delivery, course progress, or Course Bot;
+- web crawling, source acquisition, candidate selection, or search indexing;
 - deterministic repository analysis;
-- model hosting or model selection policy;
+- model calls, model hosting, or model selection policy;
+- network access or material retrieval;
 - arbitrary code execution, CI runners, deployment, or rollback.
 
-Those capabilities integrate through explicit evidence, provider, execution,
-and result contracts.
+Scout and other producers pass content-addressed evidence into Core. Platform
+applies identity, authorization, content, and commercial policy outside Core.
+Executors remain separate and must treat every Core artifact as data, not
+authority.
 
 ## Community
 
@@ -177,7 +199,7 @@ and focused proposals. Please do not use public issues for vulnerabilities.
 
 ## License
 
-Licensed under the [Apache License 2.0](LICENSE). This is technical tooling, not
-legal, security, or procurement advice. Evidence recorded by Core still needs
-human review appropriate to the decision.
-
+Licensed under the [Apache License 2.0](LICENSE). Core's license metadata and
+checks provide technical signals, not legal advice or a license-compatibility
+determination. Evidence recorded by Core still needs human review appropriate
+to the decision.

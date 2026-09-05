@@ -1,6 +1,6 @@
 # Filesystem store
 
-`FileSystemStore` is the durable local adapter for v0.1.
+`FileSystemStore` is the durable local adapter for supported Core documents.
 
 ## Guarantees
 
@@ -10,6 +10,8 @@
 - Each entity has an exclusive lock file during a write.
 - Dossier updates require the next integer revision and can require an expected
   current revision.
+- Dossier schema upgrades may move from v0.1 to v0.2; a stored v0.2 dossier
+  cannot be downgraded to v0.1 in a later revision.
 - Every accepted dossier revision is retained under `.history/`.
 - Every non-dossier document is immutable. Rewriting identical content is
   idempotent; changed content requires a new identity.
@@ -22,7 +24,13 @@
   hardware failure without filesystem and backup guarantees.
 - A process terminated while holding a lock can leave a stale lock. Confirm no
   writer is active before removing it manually.
-- URLs and file references are recorded but never fetched by Core.
+- `FileSystemStore` records URLs and file references but never resolves or fetches them.
+- `verifyWorkflowMaterials()` is a separate, explicit verifier. It reads only declared
+  local `bundlePath` files beneath a caller-provided root, enforces per-file and total
+  byte limits, and never performs network access.
+- Material verification assumes the caller controls a stable, non-concurrently-written
+  bundle directory. Treat verification of a writable directory as vulnerable to
+  time-of-check/time-of-use replacement and isolate or freeze it before verification.
 
 For hosted or multi-user deployments, implement an `ArtifactStore` adapter
 with transactional writes and resource-level authorization.

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "atlasrepo.core/route/v0.2",
+  "id": "a3f61477-8dc1-4b0e-bcbf-bc7bd4ab74a2",
+  "createdAt": "2026-09-05T01:00:00+07:00",
+  "title": "Conditional route for a bounded Dify pilot",
+  "goal": "Decide whether Dify is relevant enough for a separately authorized local pilot without treating source documentation as adoption or production proof.",
+  "dossier": {
+    "id": "5fefbbdc-89ae-4a39-a051-1ae64f2a156f",
+    "revision": 2,
+    "digest": "sha256:c45d67a485a1e8d4a08d27a018ba08058aab6c0907af30a9eda502c5c1a86f89"
+  },
+  "status": "conditional",
+  "unresolvedGates": [
+    "license-review",
+    "local-runtime-pilot",
+    "operations-review",
+    "security-review"
+  ],
+  "constraintCoverage": [
+    {
+      "constraintId": "constraint-public-pinned",
+      "status": "covered",
+      "moduleIds": ["assess-self-hosted-dify"]
+    },
+    {
+      "constraintId": "constraint-no-runtime-claim",
+      "status": "covered",
+      "moduleIds": ["assess-self-hosted-dify"]
+    },
+    {
+      "constraintId": "constraint-license-review",
+      "status": "unresolved",
+      "moduleIds": ["assess-self-hosted-dify"]
+    },
+    {
+      "constraintId": "constraint-local-pilot",
+      "status": "unresolved",
+      "moduleIds": ["assess-self-hosted-dify"]
+    },
+    {
+      "constraintId": "constraint-security-operations",
+      "status": "unresolved",
+      "moduleIds": ["assess-self-hosted-dify"]
+    }
+  ],
+  "modules": [
+    {
+      "moduleId": "assess-self-hosted-dify",
+      "version": "0.2.0",
+      "digest": "sha256:ae40456832a12e75a337ea00949ca11b226441ab04bef1928c6b066947abafa9",
+      "rationale": "The module preserves immutable evidence, separates source claims from runtime proof, and exposes each required human or execution gate.",
+      "dependsOn": [],
+      "criterionResults": [
+        {
+          "criterionId": "criterion-source-integrity",
+          "status": "fulfilled",
+          "evidenceIds": ["ev-revision", "ev-evidence-manifest", "ev-source-observations"]
+        },
+        {
+          "criterionId": "criterion-license-fit",
+          "status": "unresolved",
+          "evidenceIds": ["ev-license", "ev-repository-metadata"]
+        },
+        {
+          "criterionId": "criterion-runtime-fit",
+          "status": "unresolved",
+          "evidenceIds": ["ev-readme", "ev-compose", "ev-docker-readme"]
+        },
+        {
+          "criterionId": "criterion-operational-fit",
+          "status": "unresolved",
+          "evidenceIds": ["ev-compose", "ev-docker-readme"]
+        },
+        {
+          "criterionId": "criterion-security-fit",
+          "status": "unresolved",
+          "evidenceIds": ["ev-security-policy"]
+        }
+      ]
+    }
+  ]
+}

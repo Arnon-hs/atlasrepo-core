@@ -15,6 +15,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
@@ -22,6 +24,27 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
+      - run: npm run benchmark:dify
       - run: npm run build
-      - run: npm pack --dry-run
+      - name: Inspect package JSON
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          npm pack --dry-run --json | jq -e --arg expected "atlasrepo-core-${version}.tgz" 'length == 1 and .[0].filename == $expected'
+      - name: Verify fresh tarball install
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="$(npm pack --json | jq -r '.[0].filename')"
+          package_path="$PWD/$package"
+          install_root="$(mktemp -d "${RUNNER_TEMP:?}/atlasrepo-core-install.XXXXXX")"
+          trap 'rm -rf "$install_root" "$package_path"' EXIT HUP INT TERM
+          cd "$install_root"
+          npm init --yes >/dev/null
+          npm install --ignore-scripts "$package_path"
+          node --input-type=module -e "import('@atlasrepo/core').then((core) => { if (typeof core.composeDecisionPack !== 'function') process.exit(1) })"
+          mkdir "$install_root/repacked"
+          cd node_modules/@atlasrepo/core
+          repacked="$(npm pack --json --pack-destination "$install_root/repacked" | jq -r '.[0].filename')"
+          cmp "$package_path" "$install_root/repacked/$repacked"
       - run: npm audit --omit=dev
