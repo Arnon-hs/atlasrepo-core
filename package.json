@@ -1,6 +1,6 @@
 {
   "name": "@atlasrepo/core",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Open, local-first contracts and tooling for evidence-backed decisions.",
   "type": "module",
   "license": "Apache-2.0",
