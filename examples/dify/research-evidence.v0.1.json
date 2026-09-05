@@ -1,0 +1,46 @@
+{
+  "evidence": {
+    "id": "atlas-research-dify-core-golden-eval",
+    "kind": "repository-analysis",
+    "title": "Atlas Research Dify Core golden evaluation",
+    "resourceRef": "github:Arnon-hs/atlas-research@39a05d8f9609dde2f64882a3675d494e3ce05bfc:examples/core-v0.2.1-dify/expected-result.json",
+    "publicUri": "https://github.com/Arnon-hs/atlas-research/blob/39a05d8f9609dde2f64882a3675d494e3ce05bfc/examples/core-v0.2.1-dify/expected-result.json",
+    "digest": "sha256:01f1b99a3183a86ebc382d0a02904e1ca90703466ac33d9be2e267014f543e0d",
+    "observedAt": "2026-09-05T02:30:00Z",
+    "producer": {
+      "name": "atlas-research",
+      "version": "0.2.0"
+    },
+    "accessHint": "public",
+    "license": "MIT",
+    "limitations": [
+      "One golden case is not a benchmark.",
+      "The evaluation does not execute Dify or authorize deployment.",
+      "License, runtime, operations, and security gates remain unresolved."
+    ]
+  },
+  "receipt": {
+    "schemaVersion": "atlasrepo.core/research-evidence-receipt/v0.1",
+    "evaluationId": "atlas-research-dify-core-golden-eval",
+    "adapter": {
+      "name": "@atlasrepo/core/research-evidence-adapter",
+      "version": "0.1.0",
+      "canonicalization": "atlasrepo.core/canonical-json/v0.2"
+    },
+    "sourceSchema": {
+      "id": "atlasrepo.research/core-golden-eval-result/v0.1",
+      "version": "v0.1"
+    },
+    "evaluator": {
+      "name": "atlas-research",
+      "version": "0.2.0",
+      "digest": "sha256:63f98336bff84b8a28865a4069457660cc147fe132a76e423d0e1abd47991d6b"
+    },
+    "inputDigest": "sha256:5052900db336a746d4e635ef8fbd01a72778770b42d9192a7857ac9236f42095",
+    "outputDigest": "sha256:01f1b99a3183a86ebc382d0a02904e1ca90703466ac33d9be2e267014f543e0d",
+    "adapterInputDigest": "sha256:bca2a11d62d7a4e0e09eb419b3b33d335926934fe8ef64b68f1d6782b93aa0cf",
+    "evidenceDigest": "sha256:3d463450ba9695c9d366603c9c138c70a27fa9e2f02099d71ad65410a83548b7",
+    "accessHint": "public"
+  },
+  "receiptDigest": "sha256:a0b71ae46442bc715a37acb6c31e47ce424d1a47f395f650526599e31a35117a"
+}
