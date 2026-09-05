@@ -12,10 +12,10 @@ import { canonicalJson, sha256Digest } from "./canonical.js";
 import { assertValidDocument } from "./validate.js";
 import type {
   ArtifactStore,
+  AnyTaskDossier,
+  AnyWorkflowModuleRelease,
   CoreDocument,
   DocumentKind,
-  TaskDossier,
-  WorkflowModuleRelease,
 } from "./types.js";
 
 export class NotFoundError extends Error {}
@@ -24,10 +24,10 @@ export class StoreLockedError extends Error {}
 
 function documentId(kind: DocumentKind, document: CoreDocument): string {
   if (kind === "workflow-module-release") {
-    const release = document as WorkflowModuleRelease;
+    const release = document as AnyWorkflowModuleRelease;
     return `${release.moduleId}@${release.version}`;
   }
-  return (document as Exclude<CoreDocument, WorkflowModuleRelease>).id;
+  return (document as Exclude<CoreDocument, AnyWorkflowModuleRelease>).id;
 }
 
 function safeName(id: string): string {
@@ -115,8 +115,8 @@ export class FileSystemStore implements ArtifactStore {
       }
 
       if (kind === "task-dossier") {
-        const currentRevision = existing ? (existing as TaskDossier).revision : 0;
-        const dossier = document as TaskDossier;
+        const currentRevision = existing ? (existing as AnyTaskDossier).revision : 0;
+        const dossier = document as AnyTaskDossier;
         const nextRevision = dossier.revision;
         if (expectedRevision !== undefined && expectedRevision !== currentRevision) {
           throw new ConflictError(
@@ -129,7 +129,13 @@ export class FileSystemStore implements ArtifactStore {
           );
         }
         if (existing) {
-          const current = existing as TaskDossier;
+          const current = existing as AnyTaskDossier;
+          if (
+            current.schemaVersion === "atlasrepo.core/task-dossier/v0.2" &&
+            dossier.schemaVersion === "atlasrepo.core/task-dossier/v0.1"
+          ) {
+            throw new ConflictError("Dossier schemaVersion cannot move backwards from v0.2 to v0.1");
+          }
           if (dossier.createdAt !== current.createdAt) {
             throw new ConflictError("Dossier createdAt is immutable");
           }
@@ -140,7 +146,7 @@ export class FileSystemStore implements ArtifactStore {
       }
 
       if (kind === "task-dossier") {
-        const dossier = document as TaskDossier;
+        const dossier = document as AnyTaskDossier;
         const historyTarget = this.historyPath(id, dossier.revision);
         try {
           const archived = JSON.parse(await readFile(historyTarget, "utf8")) as CoreDocument;
@@ -190,7 +196,7 @@ export class FileSystemStore implements ArtifactStore {
     return documents;
   }
 
-  async history(id: string): Promise<TaskDossier[]> {
+  async history(id: string): Promise<AnyTaskDossier[]> {
     const directory = dirname(this.historyPath(id, 1));
     let files: string[];
     try {
@@ -199,11 +205,11 @@ export class FileSystemStore implements ArtifactStore {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
       throw error;
     }
-    const revisions: TaskDossier[] = [];
+    const revisions: AnyTaskDossier[] = [];
     for (const file of files.filter((name) => name.endsWith(".json")).sort()) {
       const document: unknown = JSON.parse(await readFile(join(directory, file), "utf8"));
       assertValidDocument("task-dossier", document);
-      revisions.push(document as TaskDossier);
+      revisions.push(document as AnyTaskDossier);
     }
     return revisions;
   }
@@ -213,6 +219,7 @@ export class FileSystemStore implements ArtifactStore {
       "task-dossier",
       "workflow-module-release",
       "route",
+      "decision-pack",
       "execution-pack",
       "result-pack",
     ];

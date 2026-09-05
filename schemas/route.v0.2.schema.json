@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Arnon-hs/atlasrepo-core/v0.2.0/schemas/route.v0.2.schema.json",
+  "title": "AtlasRepo pinned route v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "id", "createdAt", "title", "goal", "dossier", "status",
+    "unresolvedGates", "constraintCoverage", "modules"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "atlasrepo.core/route/v0.2"},
+    "id": {"type": "string", "format": "uuid"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "title": {"type": "string", "minLength": 1},
+    "goal": {"type": "string", "minLength": 1},
+    "dossier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "revision", "digest"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "revision": {"type": "integer", "minimum": 1},
+        "digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "status": {"enum": ["recommended", "conditional", "abstained"]},
+    "unresolvedGates": {"$ref": "#/$defs/uniqueStrings"},
+    "constraintCoverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["constraintId", "status", "moduleIds"],
+        "properties": {
+          "constraintId": {"$ref": "#/$defs/id"},
+          "status": {"enum": ["covered", "unresolved", "failed"]},
+          "moduleIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/moduleId"}
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"const": "covered"}}},
+            "then": {"properties": {"moduleIds": {"type": "array", "minItems": 1}}}
+          }
+        ]
+      }
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "moduleId", "version", "digest", "rationale", "dependsOn", "criterionResults"
+        ],
+        "properties": {
+          "moduleId": {"$ref": "#/$defs/moduleId"},
+          "version": {"$ref": "#/$defs/version"},
+          "digest": {"$ref": "#/$defs/digest"},
+          "rationale": {"type": "string", "minLength": 1},
+          "dependsOn": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/modulePin"}
+          },
+          "criterionResults": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["criterionId", "status", "evidenceIds"],
+              "properties": {
+                "criterionId": {"$ref": "#/$defs/id"},
+                "status": {"enum": ["fulfilled", "unresolved", "failed"]},
+                "evidenceIds": {"$ref": "#/$defs/idRefs"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"},
+    "idRefs": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/id"},
+      "uniqueItems": true
+    },
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "moduleId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"},
+    "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "modulePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["moduleId", "version"],
+      "properties": {
+        "moduleId": {"$ref": "#/$defs/moduleId"},
+        "version": {"$ref": "#/$defs/version"}
+      }
+    }
+  }
+}

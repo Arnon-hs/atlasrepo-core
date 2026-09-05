@@ -24,7 +24,7 @@
       "sourceUrl": "https://github.com/langgenius/dify.git",
       "retrievalMethod": "git ls-remote <sourceUrl> refs/heads/main",
       "mediaType": "text/plain",
-      "bytesRepresented": "ad90cb911138f6b27af996c87afe34fbb5a4ed16\\trefs/heads/main\\n",
+      "bytesRepresented": "ad90cb911138f6b27af996c87afe34fbb5a4ed16\trefs/heads/main\n",
       "sha256": "931679421a809e6319d89facb90a90c472de65bb38a0b9b0a34c265ddd5cc30c",
       "facts": {
         "ref": "refs/heads/main",
@@ -39,8 +39,11 @@
       "sourceUrl": "https://api.github.com/repos/langgenius/dify",
       "retrievalMethod": "gh repo view langgenius/dify --json nameWithOwner,url,visibility,isArchived,defaultBranchRef,licenseInfo,description",
       "mediaType": "application/json",
-      "canonicalObservationSha256": "897f0a017e728763735b71f6110da75cb2643e6b3d2ff3bb06a3581ec2357eff",
-      "facts": {
+      "canonicalization": "atlasrepo.core/canonical-json/v0.2",
+      "canonicalObservationSha256": "f8f51f34134d9750bc6641fe8cbb900ce4958524a48f1e5a0932a2ddffd71526",
+      "observation": {
+        "nameWithOwner": "langgenius/dify",
+        "url": "https://github.com/langgenius/dify",
         "visibility": "PUBLIC",
         "archived": false,
         "defaultBranch": "main",
@@ -48,7 +51,7 @@
       },
       "limitations": [
         "GitHub visibility does not determine whether a license is OSI-approved or suitable for a specific use.",
-        "Repository metadata can change after the observation time."
+        "The embedded observation is reproducible, but live repository metadata can change after the observation time."
       ]
     },
     {

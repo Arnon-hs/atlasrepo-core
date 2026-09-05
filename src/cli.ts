@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, open, readFile, readdir } from "node:fs/promises";
 import { extname, join, resolve } from "node:path";
 import { FileSystemStore } from "./store.js";
 import { readReplayFile, replay } from "./replay.js";
+import { composeDecisionPack, type ComposeDecisionPackInput } from "./compose.js";
+import { sha256Digest } from "./canonical.js";
 import {
   assertValidDocument,
   inferDocumentKind,
@@ -16,12 +18,13 @@ const kinds: DocumentKind[] = [
   "task-dossier",
   "workflow-module-release",
   "route",
+  "decision-pack",
   "execution-pack",
   "result-pack",
 ];
 
 function usage(): string {
-  return `AtlasRepo Core v0.1
+  return `AtlasRepo Core v0.2
 
 Usage:
   atlasrepo-core validate <kind> <file>
@@ -32,6 +35,7 @@ Usage:
   atlasrepo-core dossier history <id> --store <path>
   atlasrepo-core import <kind> <file> --store <path> [--expected-revision <number>]
   atlasrepo-core export <kind> <id> --store <path> --out <file>
+  atlasrepo-core compose decision-pack <input.json> --out <file>
   atlasrepo-core replay <events.jsonl> --store <path>
   atlasrepo-core schema-smoke --schema-root <atlasrepo-schema>
 
@@ -62,13 +66,19 @@ async function readJson(path: string): Promise<unknown> {
 async function writeJson(path: string, value: unknown): Promise<void> {
   const target = resolve(path);
   await mkdir(resolve(target, ".."), { recursive: true });
-  await writeFile(target, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  const handle = await open(target, "w", 0o600);
+  try {
+    await handle.chmod(0o600);
+    await handle.writeFile(`${JSON.stringify(value, null, 2)}\n`, "utf8");
+  } finally {
+    await handle.close();
+  }
 }
 
 async function jsonFiles(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   const paths: string[] = [];
-  for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+  for (const entry of entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {
     const path = join(directory, entry.name);
     if (entry.isDirectory()) paths.push(...(await jsonFiles(path)));
     if (entry.isFile() && extname(entry.name) === ".json") paths.push(path);
@@ -191,6 +201,19 @@ async function main(args: string[]): Promise<void> {
     const store = new FileSystemStore(option(rest, "--store")!);
     await writeJson(option(rest, "--out")!, await store.get(kind, id));
     process.stdout.write(`${JSON.stringify({ ok: true })}\n`);
+    return;
+  }
+
+  if (command === "compose" && subject === "decision-pack") {
+    const file = rest[0];
+    if (!file) throw new Error("Missing composition input JSON file");
+    const decisionPack = composeDecisionPack(
+      (await readJson(file)) as ComposeDecisionPackInput,
+    );
+    await writeJson(option(rest, "--out")!, decisionPack);
+    process.stdout.write(
+      `${JSON.stringify({ ok: true, id: decisionPack.id, digest: sha256Digest(decisionPack) })}\n`,
+    );
     return;
   }
 

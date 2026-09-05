@@ -1,6 +1,6 @@
 {
   "name": "@atlasrepo/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Open, local-first contracts and tooling for evidence-backed decisions.",
   "type": "module",
   "license": "Apache-2.0",
@@ -10,9 +10,18 @@
   "files": [
     "dist",
     "schemas",
+    "scripts",
+    "docs",
+    "examples",
     "README.md",
+    "CONTRIBUTING.md",
+    "GOVERNANCE.md",
     "LICENSE",
-    "NOTICE"
+    "MAINTAINERS.md",
+    "MIGRATING.md",
+    "NOTICE",
+    "ROADMAP.md",
+    "SECURITY.md"
   ],
   "bin": {
     "atlasrepo-core": "./dist/cli.js"
@@ -30,9 +39,9 @@
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "test": "npm run build --silent && node --import tsx --test test/*.test.ts tests/*.test.mjs",
     "test:coverage": "npm run build --silent && node --experimental-test-coverage --import tsx --test test/*.test.ts tests/*.test.mjs",
-    "benchmark:dify": "npm run build --silent && node --test tests/benchmark-dify.test.mjs",
+    "benchmark:dify": "npm run build --silent && node --test tests/benchmark-dify*.test.mjs",
     "schema:smoke": "npm run build --silent && node dist/cli.js schema-smoke",
-    "prepack": "npm run clean && npm run check && npm test && npm run build"
+    "prepack": "node scripts/prepack.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

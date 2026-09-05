@@ -1,0 +1,303 @@
+{
+  "schemaVersion": "atlasrepo.core/workflow-module-release/v0.2",
+  "moduleId": "assess-self-hosted-dify",
+  "version": "0.2.0",
+  "releasedAt": "2026-09-05T01:00:00+07:00",
+  "title": "Assess Dify through a bounded evidence-first pilot",
+  "summary": "Turn pinned public repository evidence into a conditional pilot route without treating documentation as runtime, security, operational, or license proof.",
+  "locale": "en",
+  "audiences": ["engineering teams", "technical decision makers"],
+  "applicability": [
+    "A team is evaluating Dify as a self-hosted platform for LLM workflows and retrieval applications.",
+    "The first decision can be based on public evidence while runtime work remains separately gated."
+  ],
+  "problem": "Source documentation can establish candidate relevance but cannot by itself justify adoption or production deployment.",
+  "intendedOutcomes": [
+    "A reproducible candidate-fit assessment pinned to immutable public evidence.",
+    "An explicit list of license, runtime, operations, and security gates.",
+    "A bounded pilot recommendation that requires separate authorization before execution."
+  ],
+  "exclusions": [
+    "Automatic deployment or adoption.",
+    "Legal advice or a license compatibility determination.",
+    "A claim that Dify is secure, performant, or production-ready.",
+    "Execution of Dify code, containers, migrations, or plugins as part of the evidence-only assessment."
+  ],
+  "evidence": [
+    {
+      "id": "ev-revision",
+      "kind": "document",
+      "title": "Pinned Dify main revision observation",
+      "resourceRef": "git+https://github.com/langgenius/dify.git#commit=ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+      "publicUri": "https://github.com/langgenius/dify/commit/ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+      "digest": "sha256:931679421a809e6319d89facb90a90c472de65bb38a0b9b0a34c265ddd5cc30c",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "git-ls-remote", "version": "system" },
+      "accessHint": "public",
+      "limitations": ["The observation records a branch head at one time; all file links remain commit-pinned."]
+    },
+    {
+      "id": "ev-repository-metadata",
+      "kind": "repository-analysis",
+      "title": "GitHub repository metadata observation",
+      "resourceRef": "atlasrepo-example:dify-public-repository-evidence-2026-09-05#ev-repository-metadata",
+      "publicUri": "https://github.com/langgenius/dify",
+      "digest": "sha256:f8f51f34134d9750bc6641fe8cbb900ce4958524a48f1e5a0932a2ddffd71526",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "gh-cli", "version": "api" },
+      "accessHint": "public",
+      "limitations": ["Public visibility does not determine license compatibility or runtime fitness.", "The embedded observation is reproducible, but live repository metadata can change after the observation time."]
+    },
+    {
+      "id": "ev-readme",
+      "kind": "document",
+      "title": "Dify README at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:README.md",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/README.md",
+      "digest": "sha256:51647e1180794278e006c7e1925eec056d5b68a036893143849ef83ad695e7e2",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "github-contents", "version": "2022-11-28" },
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "limitations": ["Upstream feature and resource statements are not observed runtime results."]
+    },
+    {
+      "id": "ev-license",
+      "kind": "document",
+      "title": "Dify modified license at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:LICENSE",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/LICENSE",
+      "digest": "sha256:232cf91474932d5110ed304e53b6b742a58463857c571fae803fdf2ac36d7bb3",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "github-contents", "version": "2022-11-28" },
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "limitations": ["Technical license evidence is not legal advice and requires qualified human review for the intended use."]
+    },
+    {
+      "id": "ev-security-policy",
+      "kind": "document",
+      "title": "Dify security policy at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:SECURITY.md",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/SECURITY.md",
+      "digest": "sha256:e9e3e170a9dd268aabd4700795833dec8de387113ecb449ff4a692908a2b08c4",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "github-contents", "version": "2022-11-28" },
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "limitations": ["A disclosure policy is not evidence that a release or deployment is secure."]
+    },
+    {
+      "id": "ev-compose",
+      "kind": "document",
+      "title": "Dify Docker Compose manifest at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:docker/docker-compose.yaml",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/docker-compose.yaml",
+      "digest": "sha256:8644fa96677327d4af69483bc0dcdf16a21b37d4ed52aaba0e3702bea7168ba8",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "github-contents", "version": "2022-11-28" },
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "limitations": ["The manifest was inspected as text and was not applied."]
+    },
+    {
+      "id": "ev-docker-readme",
+      "kind": "document",
+      "title": "Dify Docker deployment guide at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:docker/README.md",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/README.md",
+      "digest": "sha256:ad4ed57b7901e35efb10a189ce6fe01b610a164885639a23a555f4e28d3e23d9",
+      "observedAt": "2026-09-05T00:00:00+07:00",
+      "producer": { "name": "github-contents", "version": "2022-11-28" },
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "limitations": ["Documented deployment procedures were not executed."]
+    },
+    {
+      "id": "ev-evidence-manifest",
+      "kind": "dataset",
+      "title": "AtlasRepo Dify evidence manifest",
+      "resourceRef": "github:Arnon-hs/atlasrepo-core@v0.2.0:examples/dify/evidence-manifest.json",
+      "publicUri": "https://github.com/Arnon-hs/atlasrepo-core/blob/v0.2.0/examples/dify/evidence-manifest.json",
+      "digest": "sha256:eebd918b2c2b3872a118ca4baa2abc41162c161a0ac4ab9782a2a65b375e482e",
+      "observedAt": "2026-09-05T01:00:00+07:00",
+      "producer": { "name": "atlasrepo-core", "version": "0.1.0" },
+      "accessHint": "public",
+      "license": "Apache-2.0",
+      "limitations": ["The manifest contains source observations and does not contain runtime evidence."]
+    },
+    {
+      "id": "ev-source-observations",
+      "kind": "repository-analysis",
+      "title": "AtlasRepo Dify source observations",
+      "resourceRef": "github:Arnon-hs/atlasrepo-core@2941ffa2287991faa30c63c64d51b99cfec13e71:examples/dify/source-observations.md",
+      "publicUri": "https://github.com/Arnon-hs/atlasrepo-core/blob/2941ffa2287991faa30c63c64d51b99cfec13e71/examples/dify/source-observations.md",
+      "digest": "sha256:6a9ea449d0d554bec6044a2cb7f20232eb35a6193f71c66834c56953f9b2b2a9",
+      "observedAt": "2026-09-05T01:00:00+07:00",
+      "producer": { "name": "atlasrepo-core", "version": "0.1.0" },
+      "accessHint": "public",
+      "license": "Apache-2.0",
+      "limitations": ["The observations are a bounded source review, not runtime, security, or legal proof."]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-documented-fit",
+      "statement": "Dify is documented as covering the relevant workflow, retrieval, agent, model, observability, and API capabilities and provides a Compose self-hosting path.",
+      "classification": "confirmed",
+      "evidenceIds": ["ev-readme", "ev-compose", "ev-docker-readme"],
+      "limitations": ["The claim describes pinned documentation and not observed behavior."]
+    },
+    {
+      "id": "claim-conditional-pilot",
+      "statement": "The current evidence supports only a bounded local pilot after qualified license review, with adoption and deployment still blocked.",
+      "classification": "recommendation",
+      "evidenceIds": ["ev-readme", "ev-license", "ev-security-policy", "ev-compose", "ev-docker-readme"],
+      "limitations": ["The recommendation does not authorize execution and does not establish production fitness."]
+    }
+  ],
+  "prerequisites": [],
+  "relatedModules": [],
+  "inputs": [
+    {
+      "name": "targetUse",
+      "description": "The intended tenancy, branding, distribution, integrations, and operational environment.",
+      "required": true,
+      "valueSchema": { "type": "object", "additionalProperties": false, "required": ["tenancy", "environment"], "properties": { "tenancy": { "type": "string" }, "environment": { "type": "string" }, "brandingChanges": { "type": "boolean" }, "distribution": { "type": "string" } } }
+    },
+    {
+      "name": "resourceBudget",
+      "description": "CPU, memory, storage, time, and cost bounds for a future local pilot.",
+      "required": true,
+      "valueSchema": { "type": "object", "additionalProperties": false, "required": ["cpuCores", "memoryGiB"], "properties": { "cpuCores": { "type": "integer", "minimum": 1 }, "memoryGiB": { "type": "number", "exclusiveMinimum": 0 }, "maxMinutes": { "type": "integer", "minimum": 1 } } }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "decisionPack",
+      "description": "A proof-backed recommended, conditional, or abstained decision with exact evidence citations and unresolved gates.",
+      "required": true,
+      "valueSchema": { "type": "object", "required": ["status", "citations", "unresolvedGates"], "properties": { "status": { "enum": ["recommended", "conditional", "abstained"] }, "citations": { "type": "array" }, "unresolvedGates": { "type": "array" } } }
+    }
+  ],
+  "steps": [
+    {
+      "id": "inspect-pinned-sources",
+      "title": "Inspect immutable public sources",
+      "instruction": "Verify the pinned revision and source-file SHA-256 digests without executing repository code.",
+      "dependsOn": [],
+      "checkIds": ["check-source-integrity"],
+      "executionPolicy": { "effect": "read-only", "approval": "not-required", "networkDomains": ["api.github.com", "github.com", "raw.githubusercontent.com"], "secretNames": [], "timeoutSeconds": 300, "idempotency": "idempotent", "maxAttempts": 2, "recovery": "Discard the fetched metadata and retain the previously verified pin." }
+    },
+    {
+      "id": "review-license",
+      "title": "Review the modified license",
+      "instruction": "Have a qualified human assess the pinned license against the exact tenancy, branding, and distribution model; record the conclusion as new evidence.",
+      "dependsOn": ["inspect-pinned-sources"],
+      "checkIds": ["check-license-fit"],
+      "executionPolicy": { "effect": "read-only", "approval": "required-before-step", "networkDomains": [], "secretNames": [], "timeoutSeconds": 3600, "idempotency": "idempotent", "maxAttempts": 1, "recovery": "Record the failed review gate without changing the source or decision." }
+    },
+    {
+      "id": "run-bounded-local-pilot",
+      "title": "Run a separately authorized local pilot",
+      "instruction": "Only after license clearance, run Dify in an isolated local sandbox with explicit resource limits and collect startup, health, resource, integration, and teardown evidence.",
+      "dependsOn": ["review-license"],
+      "checkIds": ["check-runtime-pilot"],
+      "executionPolicy": { "effect": "local-write", "approval": "required-before-step", "networkDomains": ["ghcr.io", "registry-1.docker.io"], "secretNames": [], "timeoutSeconds": 7200, "costLimitUsd": 0, "idempotency": "requires-key", "maxAttempts": 1, "recovery": "Stop and remove only resources created under the explicit local pilot identity." }
+    },
+    {
+      "id": "review-security-operations",
+      "title": "Review security and operations",
+      "instruction": "Assess the selected configuration for threats, secrets, observability, backup, restore, upgrade, rollback, and incident recovery using independent evidence.",
+      "dependsOn": ["run-bounded-local-pilot"],
+      "checkIds": ["check-operations", "check-security"],
+      "executionPolicy": { "effect": "read-only", "approval": "required-before-step", "networkDomains": [], "secretNames": [], "timeoutSeconds": 7200, "idempotency": "idempotent", "maxAttempts": 1, "recovery": "Keep the prior decision status and attach the incomplete verification evidence." }
+    },
+    {
+      "id": "issue-decision",
+      "title": "Issue an evidence-bounded decision",
+      "instruction": "Compose a decision pack. Keep status conditional while any required gate remains unresolved and abstain if a required gate fails.",
+      "dependsOn": ["review-security-operations"],
+      "checkIds": ["check-source-integrity", "check-license-fit", "check-runtime-pilot", "check-operations", "check-security"],
+      "executionPolicy": { "effect": "read-only", "approval": "not-required", "networkDomains": [], "secretNames": [], "timeoutSeconds": 60, "idempotency": "idempotent", "maxAttempts": 1, "recovery": "Preserve the previous conditional decision and report the failed readiness check." }
+    }
+  ],
+  "checks": [
+    { "id": "check-source-integrity", "description": "Pinned source bytes match the recorded digests.", "evidenceRequirements": ["Immutable revision observation", "SHA-256 results for each cited source file"] },
+    { "id": "check-license-fit", "description": "The modified license is reviewed against the exact intended use.", "evidenceRequirements": ["Pinned license text", "Qualified human conclusion scoped to tenancy, branding, and distribution"] },
+    { "id": "check-runtime-pilot", "description": "The selected release starts and operates inside the bounded target environment.", "evidenceRequirements": ["Exact image and configuration identities", "Startup and health observations", "Resource measurements", "Integration result", "Teardown result"] },
+    { "id": "check-operations", "description": "The team can operate and recover the selected configuration.", "evidenceRequirements": ["Observability evidence", "Backup and restore result", "Upgrade and rollback result", "Incident ownership"] },
+    { "id": "check-security", "description": "A threat-informed review covers the selected release and configuration.", "evidenceRequirements": ["Threat model", "Dependency and image findings", "Secret-handling review", "Documented residual risks"] }
+  ],
+  "readinessCriteria": [
+    { "id": "criterion-source-integrity", "description": "All source evidence is immutable and digest-verified.", "required": true, "checkIds": ["check-source-integrity"] },
+    { "id": "criterion-license-fit", "description": "Qualified review permits the exact intended use.", "required": true, "checkIds": ["check-license-fit"] },
+    { "id": "criterion-runtime-fit", "description": "A bounded pilot produces acceptable runtime and resource evidence.", "required": true, "checkIds": ["check-runtime-pilot"] },
+    { "id": "criterion-operational-fit", "description": "Backup, restore, observability, upgrade, rollback, and ownership are demonstrated.", "required": true, "checkIds": ["check-operations"] },
+    { "id": "criterion-security-fit", "description": "The selected release and configuration pass an independent security review with accepted residual risk.", "required": true, "checkIds": ["check-security"] }
+  ],
+  "materials": [
+    {
+      "id": "material-evidence-manifest",
+      "kind": "source-file",
+      "title": "Dify evidence manifest",
+      "resourceRef": "github:Arnon-hs/atlasrepo-core@v0.2.0:examples/dify/evidence-manifest.json",
+      "bundlePath": "evidence-manifest.json",
+      "publicUri": "https://github.com/Arnon-hs/atlasrepo-core/blob/v0.2.0/examples/dify/evidence-manifest.json",
+      "digest": "sha256:eebd918b2c2b3872a118ca4baa2abc41162c161a0ac4ab9782a2a65b375e482e",
+      "mediaType": "application/json",
+      "locale": "en",
+      "accessHint": "public",
+      "license": "Apache-2.0",
+      "attribution": "AtlasRepo Core contributors",
+      "evidenceIds": ["ev-evidence-manifest"],
+      "limitations": ["The manifest records source evidence only."]
+    },
+    {
+      "id": "material-source-observations",
+      "kind": "article",
+      "title": "Dify source observations",
+      "resourceRef": "github:Arnon-hs/atlasrepo-core@2941ffa2287991faa30c63c64d51b99cfec13e71:examples/dify/source-observations.md",
+      "bundlePath": "source-observations.md",
+      "publicUri": "https://github.com/Arnon-hs/atlasrepo-core/blob/2941ffa2287991faa30c63c64d51b99cfec13e71/examples/dify/source-observations.md",
+      "digest": "sha256:6a9ea449d0d554bec6044a2cb7f20232eb35a6193f71c66834c56953f9b2b2a9",
+      "mediaType": "text/markdown",
+      "locale": "en",
+      "accessHint": "public",
+      "license": "Apache-2.0",
+      "attribution": "AtlasRepo Core contributors",
+      "evidenceIds": ["ev-source-observations"],
+      "limitations": ["The observations are not runtime, security, or legal proof."]
+    },
+    {
+      "id": "material-upstream-license",
+      "kind": "source-file",
+      "title": "Dify license at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:LICENSE",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/LICENSE",
+      "digest": "sha256:232cf91474932d5110ed304e53b6b742a58463857c571fae803fdf2ac36d7bb3",
+      "mediaType": "text/plain",
+      "locale": "en",
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "attribution": "Dify contributors; source at langgenius/dify commit ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+      "evidenceIds": ["ev-license"],
+      "limitations": ["Requires qualified human review for the exact intended use."]
+    },
+    {
+      "id": "material-upstream-compose",
+      "kind": "source-file",
+      "title": "Dify Docker Compose manifest at pinned revision",
+      "resourceRef": "github:langgenius/dify@ad90cb911138f6b27af996c87afe34fbb5a4ed16:docker/docker-compose.yaml",
+      "publicUri": "https://github.com/langgenius/dify/blob/ad90cb911138f6b27af996c87afe34fbb5a4ed16/docker/docker-compose.yaml",
+      "digest": "sha256:8644fa96677327d4af69483bc0dcdf16a21b37d4ed52aaba0e3702bea7168ba8",
+      "mediaType": "application/yaml",
+      "locale": "en",
+      "accessHint": "public",
+      "license": "LicenseRef-Dify-Modified-Apache-2.0",
+      "attribution": "Dify contributors; source at langgenius/dify commit ad90cb911138f6b27af996c87afe34fbb5a4ed16",
+      "evidenceIds": ["ev-compose"],
+      "limitations": ["The manifest has not been applied by this example."]
+    }
+  ]
+}

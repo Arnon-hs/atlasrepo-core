@@ -58,3 +58,31 @@ The dossier should produce `conditional-pilot`, with these unresolved gates:
 No Dify application code, container, migration, plugin, or network-facing
 service is run by this example.
 
+## v0.2 end-to-end decision pack
+
+The v0.2 example connects four immutable Core documents:
+
+- `task-dossier.v0.2.json` records constraints, evidence-backed claims, checks,
+  and the conditional decision;
+- `workflow-module-release.v0.2.json` defines the reusable assessment workflow,
+  step effects, approval boundaries, readiness criteria, and materials;
+- `route.v0.2.json` pins the exact dossier and module digests and leaves license,
+  runtime, operations, and security criteria unresolved;
+- `decision-pack.v0.1.json` is the deterministic, user-facing composition result.
+
+Build Core, validate every document, and reproduce the checked-in decision pack:
+
+```bash
+npm run build --silent
+node dist/cli.js validate task-dossier examples/dify/task-dossier.v0.2.json
+node dist/cli.js validate workflow-module-release examples/dify/workflow-module-release.v0.2.json
+node dist/cli.js validate route examples/dify/route.v0.2.json
+node dist/cli.js validate decision-pack examples/dify/decision-pack.v0.1.json
+node examples/dify/compose-decision-pack.mjs
+node --test tests/benchmark-dify-v02.test.mjs
+```
+
+The generator uses fixed identifiers, timestamps, source revisions, and content
+digests. Repeated runs therefore produce the same canonical digest. Bundled
+material digests cover raw file bytes; dossier, module, and route pins use
+Core's canonical JSON SHA-256 function.
