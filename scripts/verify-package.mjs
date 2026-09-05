@@ -8,6 +8,13 @@ import { fileURLToPath } from "node:url";
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const temporaryParent = process.env.RUNNER_TEMP ?? tmpdir();
+const repositoryManifest = JSON.parse(
+  await readFile(join(repositoryRoot, "package.json"), "utf8"),
+);
+const expectedPackageVersion = repositoryManifest.version;
+if (typeof expectedPackageVersion !== "string" || expectedPackageVersion.length === 0) {
+  throw new Error("Repository package version must be a non-empty string");
+}
 
 const expectedRuntimeFiles = new Map([
   [
@@ -131,8 +138,10 @@ try {
   const installedManifest = JSON.parse(
     await readFile(join(installedPackageRoot, "package.json"), "utf8"),
   );
-  if (installedManifest.version !== "0.2.1") {
-    throw new Error(`Installed package version is ${installedManifest.version}, expected 0.2.1`);
+  if (installedManifest.version !== expectedPackageVersion) {
+    throw new Error(
+      `Installed package version is ${installedManifest.version}, expected ${expectedPackageVersion}`,
+    );
   }
 
   for (const [name, expected] of expectedRuntimeFiles) {
